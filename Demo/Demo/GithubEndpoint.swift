@@ -9,9 +9,9 @@
 import Foundation
 import Moya
 
-private extension String {
+private extension NSString {
     var URLEscapedString: String {
-        return self.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLHostAllowedCharacterSet())!
+        return self.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlHostAllowed)!
     }
 }
 
@@ -23,7 +23,11 @@ enum GitHub {
 }
 
 extension GitHub: TargetType {
-    var baseURL: NSURL { return NSURL(string: "https://api.github.com")! }
+    public var task: Task {
+        return .request
+    }
+
+    var baseURL: URL { return URL(string: "https://api.github.com")! }
     var path: String {
         switch self {
         case .Repos(let name):
@@ -39,19 +43,19 @@ extension GitHub: TargetType {
     var method: Moya.Method {
         return .GET
     }
-    var parameters: [String: AnyObject]? {
+    var parameters: [String : Any]? {
         return nil
     }
-    var sampleData: NSData {
+    var sampleData: Data {
         switch self {
         case .Repos(_):
-            return "{{\"id\": \"1\", \"language\": \"Swift\", \"url\": \"https://api.github.com/repos/mjacko/Router\"}}".dataUsingEncoding(NSUTF8StringEncoding)!
+            return "{{\"id\": \"1\", \"language\": \"Swift\", \"url\": \"https://api.github.com/repos/mjacko/Router\"}}".data(using: String.Encoding.utf8)!
         case .Zen:
-            return "Half measures are as bad as nothing at all.".dataUsingEncoding(NSUTF8StringEncoding)!
+            return "Half measures are as bad as nothing at all.".data(using: String.Encoding.utf8)!
         case .UserProfile(let name):
-            return "{\"login\": \"\(name)\", \"id\": 100}".dataUsingEncoding(NSUTF8StringEncoding)!
+            return "{\"login\": \"\(name)\", \"id\": 100}".data(using: String.Encoding.utf8)!
         case .Repo(_):
-            return "{\"id\": \"1\", \"language\": \"Swift\", \"url\": \"https://api.github.com/repos/mjacko/Router\", \"name\": \"Router\"}".dataUsingEncoding(NSUTF8StringEncoding)!
+            return "{\"id\": \"1\", \"language\": \"Swift\", \"url\": \"https://api.github.com/repos/mjacko/Router\", \"name\": \"Router\"}".data(using: String.Encoding.utf8)!
         }
     }
     
