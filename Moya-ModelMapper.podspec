@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
   s.subspec "Core" do |ss|
     ss.source_files  = "Source/*.swift"
     ss.dependency "Moya", "~> 8.0.0-beta.2"
-    ss.dependency "ModelMapper", :git => "https://github.com/lyft/mapper.git", :tag => "5.0.0-beta.2"
+    ss.dependency = { "ModelMapper", :git => "https://github.com/lyft/mapper.git", :tag => "5.0.0-beta.2" }
     ss.framework  = "Foundation"
   end
 
